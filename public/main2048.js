@@ -104,6 +104,7 @@ $(document).keydown(function (e) {
             if (moveLeft()) {
                 setTimeout(function () {
                     generateOneNumber();
+                    sumTheScore();
                     isGameOver();
                 }, 200);
             }
@@ -130,6 +131,17 @@ $(document).keydown(function (e) {
             break;
     }
 });
+
+function sumTheScore() {
+    var sum = 0;
+    for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+            sum += board[i][j];
+        }
+    }
+    console.log(sum);
+    $("#score").html(sum);
+}
 
 function isGameOver() {
 
