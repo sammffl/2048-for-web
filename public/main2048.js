@@ -77,6 +77,7 @@ function init() {
         $('#grid-container').show();
     });
     score = 0;
+    $('#score').text(0);
 }
 
 function updateBoardView(callback) {
