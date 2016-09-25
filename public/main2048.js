@@ -7,7 +7,18 @@ var board = [];
 var score = 0;
 var hasConflicted = [];
 
+var start = {
+    x: 0,
+    y: 0
+}
+var end = {
+    x: 0,
+    y: 0
+}
+
 $(function () {
+    prepareForMobile()
+
     newGame();
 
     $('#newGame').bind('click', function () {
@@ -15,6 +26,23 @@ $(function () {
     })
 });
 
+function prepareForMobile() {
+    if (documentWidth > 500) {
+        gridContainerWidth = 500;
+        cellSpace = 20;
+        cellSideLength = 100;
+    }
+
+
+    $('#grid-container').css('width', gridContainerWidth - 2 * cellSpace);
+    $('#grid-container').css('height', gridContainerWidth - 2 * cellSpace);
+    $('#grid-container').css('padding', cellSpace);
+    $('#grid-container').css('border-radius', 0.02 * gridContainerWidth);
+
+    $('.grid-cell').css('width', cellSideLength);
+    $('.grid-cell').css('height', cellSideLength);
+    // $('.grid-cell').css('border-radius', 0.02 * cellSideLength);
+}
 
 function newGame() {
     //棋盘格初始化
@@ -26,6 +54,7 @@ function newGame() {
 }
 
 function init() {
+    $('#grid-container').hide();
     board = [];
     for (var i = 0; i < 4; i++) {
         for (var j = 0; j < 4; j++) {
@@ -44,11 +73,13 @@ function init() {
         }
     }
 
-    updateBoardView();
+    updateBoardView(function () {
+        $('#grid-container').show();
+    });
     score = 0;
 }
 
-function updateBoardView() {
+function updateBoardView(callback) {
     $('.number-cell').remove();
     for (var i = 0; i < 4; i++) {
         for (var j = 0; j < 4; j++) {
@@ -58,11 +89,11 @@ function updateBoardView() {
             if (board[i][j] === 0) {
                 theNumberCell.css('width', '0px');
                 theNumberCell.css('height', '0px');
-                theNumberCell.css('top', getPosTop(i, j) + 50);
-                theNumberCell.css('left', getPosLeft(i, j) + 50);
+                theNumberCell.css('top', getPosTop(i, j) + cellSideLength / 2);
+                theNumberCell.css('left', getPosLeft(i, j) + cellSideLength / 2);
             } else {
-                theNumberCell.css('width', '100px');
-                theNumberCell.css('height', '100px');
+                theNumberCell.css('width', cellSideLength + 'px');
+                theNumberCell.css('height', cellSideLength + 'px');
                 theNumberCell.css('top', getPosTop(i, j));
                 theNumberCell.css('left', getPosLeft(i, j));
                 theNumberCell.css('background-color', getNumberBackgroundColor(board[i][j]))
@@ -71,6 +102,15 @@ function updateBoardView() {
             }
             hasConflicted[i][j] = false;
         }
+    }
+
+    $('.number-cell').css('line-height', cellSideLength + 'px');
+    // $('.number-cell').css('border-radius', 0.02 * cellSideLength + 'px');
+    // $('.number-cell').css('font-size', 0.6 * cellSideLength + 'px');
+
+
+    if (!!callback && typeof callback == "function") {
+        callback();
     }
 }
 
@@ -117,8 +157,10 @@ function generateOneNumber() {
 
 
 $(document).keydown(function (e) {
+
     switch (e.keyCode) {
         case 37: //left
+            event.preventDefault();
             if (moveLeft()) {
                 setTimeout(function () {
                     generateOneNumber();
@@ -129,6 +171,7 @@ $(document).keydown(function (e) {
             }
             break;
         case 38: //up
+            event.preventDefault();
             if (moveUp()) {
                 setTimeout(function () {
                     generateOneNumber();
@@ -139,6 +182,7 @@ $(document).keydown(function (e) {
             }
             break;
         case 39: //right
+            event.preventDefault();
             if (moveRight()) {
                 setTimeout(function () {
                     generateOneNumber();
@@ -149,6 +193,7 @@ $(document).keydown(function (e) {
             }
             break;
         case 40: //down
+            event.preventDefault();
             if (moveDown()) {
                 setTimeout(function () {
                     generateOneNumber();
@@ -160,6 +205,68 @@ $(document).keydown(function (e) {
             break;
         default:
             break;
+    }
+});
+
+document.addEventListener('touchstart', function (event) {
+    start.x = event.touches[0].pageX;
+    start.y = event.touches[0].pageY;
+});
+
+document.addEventListener('touchmove', function (event) {
+    event.preventDefault();
+});
+
+document.addEventListener('touchend', function (event) {
+    end.x = event.changedTouches[0].pageX;
+    end.y = event.changedTouches[0].pageY;
+
+    var deltaX = end.x - start.x;
+    var deltaY = end.y - start.y;
+    if (Math.abs(deltaX) < 30 && Math.abs(deltaY) < 30) {
+        return;
+    }
+
+    if (Math.abs(deltaX) >= Math.abs(deltaY)) {
+        if (deltaX > 0) {
+            if (moveRight()) {
+                setTimeout(function () {
+                    generateOneNumber();
+                }, 210);
+                setTimeout(function () {
+                    isGameOver();
+                }, 300);
+            }
+        } else {
+            if (moveLeft()) {
+                setTimeout(function () {
+                    generateOneNumber();
+                }, 210);
+                setTimeout(function () {
+                    isGameOver();
+                }, 300);
+            }
+        }
+    } else {
+        if (deltaY > 0) {
+            if (moveDown()) {
+                setTimeout(function () {
+                    generateOneNumber();
+                }, 210);
+                setTimeout(function () {
+                    isGameOver();
+                }, 300);
+            }
+        } else {
+            if (moveUp()) {
+                setTimeout(function () {
+                    generateOneNumber();
+                }, 210);
+                setTimeout(function () {
+                    isGameOver();
+                }, 300);
+            }
+        }
     }
 });
 

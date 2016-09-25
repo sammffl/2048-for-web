@@ -10,8 +10,8 @@ function showNumberWithAnimation(i, j, num) {
     // numberCell.text(num);
     numberCell.text(getITAlias(num));
     numberCell.animate({
-        width: "100px",
-        height: '100px',
+        width: cellSideLength+"px",
+        height: cellSideLength+'px',
         top: getPosTop(i, j),
         left: getPosLeft(i, j)
     }, 50);
