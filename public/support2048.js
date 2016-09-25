@@ -62,6 +62,8 @@ function getNumberBackgroundColor(number) {
 }
 
 function getITAlias(num) {
+    return num;
+
     switch (num) {
         case 2:
             return "小白";
