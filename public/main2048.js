@@ -217,7 +217,7 @@ function moveRight() {
     for (var i = 0; i < 4; i++) {
         for (var j = 2; j >= 0; j--) {
             if (board[i][j] != 0) {
-                for (var k = 3; k >= j; k--) {
+                for (var k = 3; k > j; k--) {
                     if (board[i][k] == 0 && noBlockHorizontal(i, j, k, board)) {
                         showMoveAnimation(i, j, i, k);
                         board[i][k] = board[i][j];
