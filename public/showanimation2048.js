@@ -7,7 +7,8 @@ function showNumberWithAnimation(i, j, num) {
 
     numberCell.css('background-color', getNumberBackgroundColor(num));
     numberCell.css('color', getNumberColor(num));
-    numberCell.text(num);
+    // numberCell.text(num);
+    numberCell.text(getITAlias(num));
     numberCell.animate({
         width: "100px",
         height: '100px',
