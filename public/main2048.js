@@ -165,10 +165,10 @@ $(document).keydown(function (e) {
             if (moveLeft()) {
                 setTimeout(function () {
                     generateOneNumber();
-                }, 210);
+                }, 105);
                 setTimeout(function () {
                     isGameOver();
-                }, 300);
+                }, 150);
             }
             break;
         case 38: //up
@@ -176,10 +176,10 @@ $(document).keydown(function (e) {
             if (moveUp()) {
                 setTimeout(function () {
                     generateOneNumber();
-                }, 210);
+                }, 105);
                 setTimeout(function () {
                     isGameOver();
-                }, 300);
+                }, 150);
             }
             break;
         case 39: //right
@@ -187,10 +187,10 @@ $(document).keydown(function (e) {
             if (moveRight()) {
                 setTimeout(function () {
                     generateOneNumber();
-                }, 210);
+                }, 105);
                 setTimeout(function () {
                     isGameOver();
-                }, 300);
+                }, 150);
             }
             break;
         case 40: //down
@@ -198,10 +198,10 @@ $(document).keydown(function (e) {
             if (moveDown()) {
                 setTimeout(function () {
                     generateOneNumber();
-                }, 210);
+                }, 105);
                 setTimeout(function () {
                     isGameOver();
-                }, 300);
+                }, 150);
             }
             break;
         default:
@@ -233,19 +233,19 @@ document.addEventListener('touchend', function (event) {
             if (moveRight()) {
                 setTimeout(function () {
                     generateOneNumber();
-                }, 210);
+                }, 105);
                 setTimeout(function () {
                     isGameOver();
-                }, 300);
+                }, 150);
             }
         } else {
             if (moveLeft()) {
                 setTimeout(function () {
                     generateOneNumber();
-                }, 210);
+                }, 105);
                 setTimeout(function () {
                     isGameOver();
-                }, 300);
+                }, 150);
             }
         }
     } else {
@@ -253,19 +253,19 @@ document.addEventListener('touchend', function (event) {
             if (moveDown()) {
                 setTimeout(function () {
                     generateOneNumber();
-                }, 210);
+                }, 105);
                 setTimeout(function () {
                     isGameOver();
-                }, 300);
+                }, 150);
             }
         } else {
             if (moveUp()) {
                 setTimeout(function () {
                     generateOneNumber();
-                }, 210);
+                }, 105);
                 setTimeout(function () {
                     isGameOver();
-                }, 300);
+                }, 150);
             }
         }
     }
@@ -314,7 +314,7 @@ function moveLeft() {
     }
     setTimeout(function () {
         updateBoardView();
-    }, 200);
+    }, 100);
     return true;
 }
 
@@ -349,7 +349,7 @@ function moveRight() {
     }
     setTimeout(function () {
         updateBoardView();
-    }, 200);
+    }, 100);
     return true;
 }
 
@@ -384,7 +384,7 @@ function moveUp() {
     }
     setTimeout(function () {
         updateBoardView();
-    }, 200);
+    }, 100);
     return true;
 }
 
@@ -419,6 +419,6 @@ function moveDown() {
     }
     setTimeout(function () {
         updateBoardView();
-    }, 200);
+    }, 100);
     return true;
 }

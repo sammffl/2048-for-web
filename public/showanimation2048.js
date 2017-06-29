@@ -23,7 +23,7 @@ function showMoveAnimation(fromX, fromY, toX, toY) {
     numberCell.animate({
         top: getPosTop(toX, toY),
         left: getPosLeft(toX, toY)
-    }, 200);
+    }, 100);
 }
 
 function updateScore(score) {
