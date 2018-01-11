@@ -1,0 +1,80 @@
+@import "reset";
+
+@function px2rem($px, $base: 37.5) {
+  @return ($px / $base) * 1rem;
+}
+
+header {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+header h1 {
+  font-family: Arial;
+  font-size: px2rem(30);
+  font-weight: bold;
+  padding: 0;
+  margin: px2rem(4);
+}
+
+header #newGame {
+  display: block;
+  margin: px2rem(5) auto;
+  width: px2rem(180);
+  padding: px2rem(5) px2rem(10);
+  background-color: #8F7A66;
+  color: white;
+  border-radius: px2rem(10);
+  text-decoration: none;
+}
+
+header #newGame:hover {
+  background-color: #9F8B77;
+}
+
+header p {
+  font-size: px2rem(25);
+  margin: px2rem(5) auto;
+}
+
+#grid-container {
+  font-size: px2rem(18);
+  width: px2rem(360);
+  height: px2rem(360);//460px;
+  padding: px2rem(8);
+  /*border: 4px solid #bbada0;*/
+  background-color: #bbada0;
+  border-radius: 10px;
+  margin: 0 auto;
+  position: relative;
+  display: none;
+}
+
+#grid-container:after {
+  content: "";
+  display: block;
+  clear: both;
+  width: 0;
+  font-size: 0;
+}
+
+.grid-cell {
+  width: px2rem(80);
+  height: px2rem(80);
+  border-radius: 6px;
+  background-color: #ccc0b3;
+  position: absolute;
+}
+
+.number-cell {
+  width: px2rem(80);
+  height: px2rem(80);
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: px2rem(12);
+  line-height: px2rem(80);
+  text-align: center;
+  position: absolute;
+}
