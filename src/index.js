@@ -6,10 +6,10 @@ import 'flexible';
 import './assets/styles/index.scss';
 import Game from './utils/game';
 
-let game = new Game({needAlias: true});
-game.init();
+let game = new Game({needAlias: false});
+game.startGame();
 
 
 document.querySelector('#newGame').addEventListener('click', function bindNewGameSubmit() {
-    game.test();
+    game.startGame();
 }, false);

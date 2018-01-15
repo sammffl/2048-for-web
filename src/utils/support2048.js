@@ -15,6 +15,11 @@ export function getSinglePos(num, cellPadding = 8, cellWidth = 80) {
     return px2rem(cellPadding) + (px2rem(cellWidth) + px2rem(cellPadding)) * num;
 }
 
+/**
+ * 删除页面元素
+ * @param element
+ * @returns {boolean}
+ */
 export function removeElement(element) {
     if (!element)return false;
 
@@ -59,6 +64,18 @@ export function getNumberBackgroundColor(number) {
     return colors[number] || 'black';
 }
 
+export function getNumberColor(number) {
+    if (number <= 4) {
+        return '#776e65';
+    }
+    return 'white';
+}
+
+/**
+ * 别名，把数字转换成名称
+ * @param number
+ * @returns {*|string}
+ */
 export function getITAlias(number) {
 
     const aliasName = {
@@ -78,12 +95,102 @@ export function getITAlias(number) {
     return aliasName[number] || '神人';
 }
 
-
-export function getNumberColor(number) {
-    if (number <= 4) {
-        return '#776e65';
+/**
+ * 判断是否有空间
+ * @param board
+ * @returns {boolean}
+ */
+export function noSpace(board) {
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            if (board[i][j] == 0) {
+                return false;
+            }
+        }
     }
-    return 'white';
+    return true;
+}
+
+
+export function canMoveLeft(board) {
+    for (let i = 0; i < 4; i++) {
+        for (let j = 1; j < 4; j++) {
+            if (board[i][j] != 0) {
+                if (board[i][j - 1] == 0 || board[i][j - 1] == board[i][j]) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+export function canMoveRight(board) {
+    for (let i = 0; i < 4; i++) {
+        for (let j = 2; j >= 0; j--) {
+            if (board[i][j] != 0) {
+                if (board[i][j + 1] == 0 || board[i][j + 1] == board[i][j]) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+export function canMoveUp(board) {
+    for (let j = 0; j < 4; j++) {
+        for (let i = 1; i < 4; i++) {
+            if (board[i][j] != 0) {
+                if (board[i - 1][j] == 0 || board[i - 1][j] == board[i][j]) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+export function canMoveDown(board) {
+    for (let j = 0; j < 4; j++) {
+        for (let i = 2; i >= 0; i--) {
+            if (board[i][j] != 0) {
+                if (board[i + 1][j] == 0 || board[i + 1][j] == board[i][j]) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+export function noBlockHorizontal(row, col1, col2, board) {
+    for (let i = col1 + 1; i < col2; i++) {
+        if (board[row][i] != 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+export function noBlockVertical(col, row1, row2, board) {
+    for (let i = row1 + 1; i < row2; i++) {
+        if (board[i][col] != 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+export function noMove(board) {
+    if (canMoveLeft(board) ||
+        canMoveRight(board) ||
+        canMoveUp(board) ||
+        canMoveDown(board)) {
+        return false;
+    }
+    return true;
 }
 
 
@@ -92,5 +199,13 @@ export default {
     removeElement,
     getNumberBackgroundColor,
     getITAlias,
-    getNumberColor
+    getNumberColor,
+    noSpace,
+    canMoveLeft,
+    canMoveRight,
+    canMoveUp,
+    canMoveDown,
+    noBlockHorizontal,
+    noBlockVertical,
+    noMove,
 }
