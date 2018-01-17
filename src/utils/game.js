@@ -18,7 +18,7 @@ import {
     noMove,
 } from './support2048';
 
-export default class game {
+export default class  game {
 
     constructor(props) {
         this._needAlias = props.needAlias;
@@ -67,6 +67,16 @@ export default class game {
 
     _bindTouch() {
         let self = this;
+
+        function generator() {
+            setTimeout(() => {
+                self._generateOneNumber();
+            }, 140);
+            setTimeout(() => {
+                self._isGameOver();
+            }, 150);
+        }
+
         document.addEventListener('touchstart', function (event) {
             self.start.x = event.touches[0].pageX;
             self.start.y = event.touches[0].pageY;
@@ -85,24 +95,61 @@ export default class game {
             if (Math.abs(deltaX) < 30 && Math.abs(deltaY) < 30) return false;
             if (Math.abs(deltaX) >= Math.abs(deltaY)) {
                 if (deltaX > 0) { // 向右滑动
-
+                    if (self._moveRight()) {
+                        generator();
+                    }
                 } else { // 向左滑动
                     if (self._moveLeft()) {
-                        console.log('sdf');
-                        setTimeout(() => {
-                            console.log(123)
-                            self._generateOneNumber();
-                        }, 105);
-                        setTimeout(() => {
-                            self._isGameOver();
-                        }, 150);
-                    }else{
-                        console.log('ss')
+                        generator();
                     }
+                }
+            } else {
+                if (deltaY > 0) {
+                    if (self._moveDown()) {
+                        generator()
+                    }
+                } else {
+                    if(self._moveUp()){
+                        generator();
+                    }
+
                 }
             }
 
-        })
+        });
+
+        $(document).keydown(function (e) {
+
+            switch (e.keyCode) {
+                case 37: //left
+                    event.preventDefault();
+                    if (self._moveLeft()) {
+                        generator();
+                    }
+                    break;
+                case 38: //up
+                    event.preventDefault();
+                    if (self._moveUp()) {
+                        generator();
+                    }
+                    break;
+                case 39: //right
+                    event.preventDefault();
+                    if (self._moveRight()) {
+                        generator();
+                    }
+                    break;
+                case 40: //down
+                    event.preventDefault();
+                    if (self._moveDown()) {
+                        generator();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
     }
 
     _moveLeft() {
@@ -128,6 +175,117 @@ export default class game {
                             this.score += this.board[i][k];
                             this._updateScore(this.score);
                             this.hasConflicted[i][k] = true;
+
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+
+        setTimeout(() => {
+            this._updateBoardView();
+        }, 100);
+        return true;
+    }
+
+    _moveRight() {
+        if (!canMoveRight(this.board)) return false;
+
+        for (let i = 0; i < 4; i++) {
+            for (let j = 2; j >= 0; j--) {
+                if (this.board[i][j] != 0) {
+                    for (let k = 3; k > j; k--) {
+                        if (this.board[i][k] == 0 && noBlockHorizontal(i, k, j, this.board)) {
+                            // 没有阻碍，继续往左移
+                            this._showMoveAnimation(i, j, i, k);
+                            this.board[i][k] = this.board[i][j];
+                            this.board[i][j] = 0;
+                            continue;
+
+                        } else if (this.board[i][k] == this.board[i][j] &&
+                            noBlockHorizontal(i, k, j, this.board) && !this.hasConflicted[i][k]) {
+
+                            this._showMoveAnimation(i, j, i, k);
+                            this.board[i][k] += this.board[i][j];
+                            this.board[i][j] = 0;
+                            this.score += this.board[i][k];
+                            this._updateScore(this.score);
+                            this.hasConflicted[i][k] = true;
+
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+
+        setTimeout(() => {
+            this._updateBoardView();
+        }, 100);
+        return true;
+    }
+
+    _moveDown() {
+        if (!canMoveDown(this.board)) return false;
+
+        for (let j = 0; j < 4; j++) {
+            for (let i = 2; i >= 0; i--) {
+                if (this.board[i][j] != 0) {
+                    for (let k = 3; k > i; k--) {
+                        if (this.board[k][j] == 0 && noBlockVertical(j, i, k, this.board)) {
+                            // 没有阻碍，继续往左移
+                            this._showMoveAnimation(i, j, k, j);
+                            this.board[k][j] = this.board[i][j];
+                            this.board[i][j] = 0;
+                            continue;
+
+                        } else if (this.board[k][j] == this.board[i][j] &&
+                            noBlockVertical(j, i, k, this.board) && !this.hasConflicted[k][j]) {
+
+                            this._showMoveAnimation(i, j, k, j);
+                            this.board[k][j] += this.board[i][j];
+                            this.board[i][j] = 0;
+                            this.score += this.board[k][j];
+                            this._updateScore(this.score);
+                            this.hasConflicted[k][j] = true;
+
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+
+        setTimeout(() => {
+            this._updateBoardView();
+        }, 100);
+        return true;
+    }
+
+    _moveUp() {
+        if (!canMoveUp(this.board)) return false;
+
+        for (let j = 0; j < 4; j++) {
+            for (let i = 1; i < 4; i++) {
+                if (this.board[i][j] != 0) {
+                    for (let k = 0; k < i; k++) {
+                        if (this.board[k][j] == 0 && noBlockVertical(j, k, i, this.board)) {
+                            // 没有阻碍，继续往左移
+                            this._showMoveAnimation(i, j, k, j);
+                            this.board[k][j] = this.board[i][j];
+                            this.board[i][j] = 0;
+                            continue;
+
+                        } else if (this.board[k][j] == this.board[i][j] &&
+                            noBlockVertical(j, k, i, this.board) && !this.hasConflicted[k][j]) {
+
+                            this._showMoveAnimation(i, j, k, j);
+                            this.board[k][j] += this.board[i][j];
+                            this.board[i][j] = 0;
+                            this.score += this.board[k][j];
+                            this._updateScore(this.score);
+                            this.hasConflicted[k][j] = true;
 
                             continue;
                         }
@@ -171,7 +329,7 @@ export default class game {
         !!callback && callback();
     }
 
-    _createNumberCell(i,j , num){
+    _createNumberCell(i, j, num) {
         const boardNumber = num;
         let numberCellDiv = document.createElement('div');
         numberCellDiv.id = `number-cell-${i}-${j}`;
@@ -217,24 +375,8 @@ export default class game {
         //随机一个数字
         let randNumber = this.board[randomX][randomY] = Math.random() < 0.5 ? 2 : 4;
         // this._showNumberWithAnimation(randomX, randomY, randNumber);
-        this._createNumberCell(randomX,randomY, randNumber);
+        this._createNumberCell(randomX, randomY, randNumber);
         return true;
-    }
-
-    _showNumberWithAnimation(i, j, num) {
-
-        // let numberCell = $('#number-cell-' + i + '-' + j);
-        //
-        //
-        //
-        // numberCell.css('background-color', getNumberBackgroundColor(num));
-        // numberCell.css('color', getNumberColor(num));
-        // numberCell.text(getITAlias(num));
-        // numberCell.animate({
-        //     top: `${getSinglePos(i)}rem`,
-        //     left: `${getSinglePos(j)}rem`,
-        // }, 50);
-
     }
 
     _showMoveAnimation(fromX, fromY, toX, toY) {
